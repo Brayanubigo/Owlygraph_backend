@@ -32,7 +32,7 @@ router.post('/upload', upload.single('file'), async (req,res) =>{
      await newImage.save();
      
     
-     fs.unlinkSync(file.path)
+     await fs.unlinkSync(file.path)
     
      res.status(200).json ('recibido')
         
@@ -80,8 +80,14 @@ router.post('/uploadPjs', upload.single('file'), async (req,res) =>{
    });
    
    await newImagePjs.save();
+ 
   
-   fs.unlinkSync(file.path)
+   await fs.unlinkSync(file.path)
+ 
+   
+ 
+ 
+  
    
    res.status(200).json ('recibido')
       

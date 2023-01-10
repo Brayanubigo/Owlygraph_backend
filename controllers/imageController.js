@@ -2,7 +2,7 @@ import multer from "multer";
 import Image from '../models/Imagen.js';
  const storage = multer.diskStorage({
     destination:(req,file,cb) =>{
-        cb(null,'../api-buffon')
+        cb(null,'../api-buffon/upload')
     },
     filename:(req,file,cb) =>{
         const ext = file.originalname.split('.').pop()

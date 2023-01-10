@@ -20,6 +20,7 @@ router.post('/upload', upload.single('file'), async (req,res) =>{
    
     try {
       const file = req.file
+      console.log(file)
       // Upload the image
        const result = await cloudinary.uploader.upload(req.file.path)
         
@@ -29,9 +30,10 @@ router.post('/upload', upload.single('file'), async (req,res) =>{
      });
      
      await newImage.save();
+     
     
      fs.unlinkSync(file.path)
-     
+    
      res.status(200).json ('recibido')
         
       } catch (error) {

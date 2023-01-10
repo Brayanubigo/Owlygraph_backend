@@ -31,11 +31,11 @@ router.post('/upload', upload.single('file'), async (req,res) =>{
      
      await newImage.save();
      
-    
+     await fs.unlinkSync(file.path)
   
     
      res.status(200).json ('recibido')
-     
+      
       } catch (error) {
         console.log(error)
         res.status(400).json({msg:"No hay fotos"})  

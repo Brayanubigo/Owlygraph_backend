@@ -5,6 +5,7 @@ import cloudinary from 'cloudinary';
 import fs from 'fs'
 import {storage ,upload} from '../controllers/imageController.js'
 import dotenv from "dotenv";
+import ImagePjs from "../models/ImagenPjs.js";
 
 const router = express.Router();
 dotenv.config();
@@ -63,10 +64,45 @@ router.post('/uploadPer', upload.single('file'), async (req,res) =>{
     }
 });
 
+
+router.post('/uploadPjs', upload.single('file'), async (req,res) =>{
+   
+  try {
+    const file = req.file
+    // Upload the image
+     const result = await cloudinary.uploader.upload(req.file.path)
+      
+   const newImagePjs = new ImagePjs({
+      imageURL: result.url,
+      public_id: result.public_id
+   });
+   
+   await newImagePjs.save();
+  
+   fs.unlinkSync(file.path)
+   
+   res.status(200).json ('recibido')
+      
+    } catch (error) {
+      console.log(error)
+      res.status(400).json({msg:"No hay fotos"})  
+    }
+});
+
+
+
+// OBTENER DATOS
+
 router.get('/showPer', async (req,res) =>{
     const images = await ImagePer.find()
    
     res.json( images);
+});
+
+router.get('/showPjs', async (req,res) =>{
+  const images = await ImagePjs.find()
+ 
+  res.json( images);
 });
 
 router.get('/showtable', async (req,res) =>{
@@ -74,6 +110,11 @@ router.get('/showtable', async (req,res) =>{
 
   res.json( images);
 });
+
+
+//Eliminar 
+
+
 
 router.get('/delete/:image_id', async (req,res) =>{
   const {image_id} = req.params;
@@ -94,6 +135,17 @@ router.get('/deleteper/:image_id', async (req,res) =>{
 
   res.json( images);
 });
+
+router.get('/deletepjs/:image_id', async (req,res) =>{
+  const {image_id} = req.params;
+  
+  const images = await ImagePjs.findByIdAndDelete(image_id);
+  const result = cloudinary.v2.uploader.destroy(images.public_id);
+  console.log(result)
+
+  res.json( images);
+});
+
 
 
 

@@ -20,12 +20,12 @@ router.post('/upload', upload.single('file'), async (req,res) =>{
    
     try {
       const file = req.file
-      console.log(file)
+      
       // Upload the image
        const result = await cloudinary.uploader.upload(req.file.path)
-        
+        console.log(result)
      const newImage = new Image({
-        imageURL: result.url,
+        imageURL: result.secure_url,
         public_id: result.public_id
      });
      
@@ -50,7 +50,7 @@ router.post('/uploadPer', upload.single('file'), async (req,res) =>{
      const result = await cloudinary.uploader.upload(req.file.path)
       
    const newImagePer = new ImagePer({
-      imageURL: result.url,
+      imageURL: result.secure_url,
       public_id: result.public_id
    });
    
@@ -75,7 +75,7 @@ router.post('/uploadPjs', upload.single('file'), async (req,res) =>{
      const result = await cloudinary.uploader.upload(req.file.path)
       
    const newImagePjs = new ImagePjs({
-      imageURL: result.url,
+      imageURL: result.secure_url,
       public_id: result.public_id
    });
    
